@@ -1,17 +1,26 @@
 pipeline {
     agent any
-    
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Basant-mahmoud/task_cloud.git'
+                script {
+                    // Ensure to use the right credentials ID
+                    def scmVars = checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: 'main']],
+                        userRemoteConfigs: [[
+                            url: 'https://github.com/Basant-mahmoud/task_cloud.git',
+                            credentialsId: 'your-credentials-id'
+                        ]]
+                    ])
+                }
             }
         }
-        stage('Execute Script') {
+        stage('Print Hello World') {
             steps {
-                // Ensure the script is executable and run it
-                sh 'chmod +x list_files.sh'
-                sh './list_files.sh'
+                // Print Hello World
+                echo 'Hello World'
             }
         }
     }
